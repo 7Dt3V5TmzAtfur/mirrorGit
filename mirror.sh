@@ -4,6 +4,8 @@
 GITHUB_USER="$1"
 GITHUB_TOKEN="$2"
 GITEA_URL="$3"
+GITEA_HOST=$(echo "$GITEA_URL" | sed 's|https://||; s|http://||')
+GITEA_PROTO=$(echo "$GITEA_URL" | grep -o 'https://' >/dev/null && echo "https" || echo "http")
 GITEA_USER="$4"
 GITEA_TOKEN="$5"
 WORK_DIR="$6"
@@ -73,7 +75,7 @@ sync_repository() {
         cd "$repo"
 
         # 尝试 mirror 推送
-        if ! git push --mirror "https://$GITEA_USER:$GITEA_TOKEN@${GITEA_URL#https://}/$GITEA_USER/$repo.git"; then
+        if ! git push --mirror "$GITEA_PROTO://$GITEA_USER:$GITEA_TOKEN@$GITEA_HOST/$GITEA_USER/$repo.git"; then
             echo "mirror 推送失败，尝试逐个分支推送..."
 
             # 获取所有分支
@@ -82,13 +84,13 @@ sync_repository() {
             # 推送每个分支
             git for-each-ref --format='%(refname:short)' refs/heads/ | while read branch; do
                 echo "推送分支: $branch"
-                if ! git push "https://$GITEA_USER:$GITEA_TOKEN@${GITEA_URL#https://}/$GITEA_USER/$repo.git" "$branch:$branch"; then
+                if ! git push "$GITEA_PROTO://$GITEA_USER:$GITEA_TOKEN@$GITEA_HOST/$GITEA_USER/$repo.git" "$branch:$branch"; then
                     success=false
                 fi
             done
 
             # 推送所有标签
-            if ! git push "https://$GITEA_USER:$GITEA_TOKEN@${GITEA_URL#https://}/$GITEA_USER/$repo.git" --tags; then
+            if ! git push "$GITEA_PROTO://$GITEA_USER:$GITEA_TOKEN@$GITEA_HOST/$GITEA_USER/$repo.git" --tags; then
                 success=false
             fi
         fi
