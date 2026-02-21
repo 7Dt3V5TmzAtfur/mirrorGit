@@ -110,10 +110,13 @@ bash main.sh
 | MAIL_TO | 否 | 接收通知的邮箱 | `your-email@example.com` |
 | MAIL_FROM | 否 | 发件人地址（默认为 SMTP_USER） | `noreply@example.com` |
 
+ENABLE_MAIL=true
+
 ### 邮件通知使用示例
 
 ### 完整配置示例
 ```bash
+ENABLE_MAIL=true
 GITHUB_USER=username \
 GITHUB_TOKEN=xxx \
 GITEA_URL=https://git.example.com \
@@ -129,7 +132,7 @@ bash main.sh
 
 ### Crontab 配置示例
 ```bash
-0 2 * * * GITHUB_USER=username GITHUB_TOKEN=xxx GITEA_URL=https://git.example.com GITEA_USER=username GITEA_TOKEN=xxx SMTP_SERVER=smtp.gmail.com SMTP_PORT=587 SMTP_USER=your-email@gmail.com SMTP_PASS=your-password MAIL_TO=your-email@example.com /path/to/main.sh
+0 2 * * * ENABLE_MAIL=true GITHUB_USER=username GITHUB_TOKEN=xxx GITEA_URL=https://git.example.com GITEA_USER=username GITEA_TOKEN=xxx SMTP_SERVER=smtp.gmail.com SMTP_PORT=587 SMTP_USER=your-email@gmail.com SMTP_PASS=your-password MAIL_TO=your-email@example.com /path/to/main.sh
 ```
 
 ## 常见问题
