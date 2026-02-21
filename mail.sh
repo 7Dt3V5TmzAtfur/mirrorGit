@@ -20,8 +20,8 @@ Date: $(date -R)
 
 $BODY"
 
-    if [ "$SMTP_PORT" == 465 ]; then
-      curl -s --url "smtps://$SMTP_SERVER:$SMTP_PORT" \
+    if [ "$SMTP_PORT" == "465" ]; then
+      curl --url "smtps://$SMTP_SERVER:$SMTP_PORT" \
           --mail-from "$MAIL_FROM" \
           --mail-rcpt "$MAIL_TO" \
           --upload-file - \
@@ -29,7 +29,7 @@ $BODY"
           --user "$SMTP_USER:$SMTP_PASS" \
           <<< "$email_content"
     else
-      curl -s --url "smtp://$SMTP_SERVER:$SMTP_PORT" \
+      curl --url "smtp://$SMTP_SERVER:$SMTP_PORT" \
           --mail-from "$MAIL_FROM" \
           --mail-rcpt "$MAIL_TO" \
           --upload-file - \
